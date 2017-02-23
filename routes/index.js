@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var helper = require('../helpers/util');
+let model = require('../models')
 
 /* GET home page. */
 
@@ -16,5 +17,21 @@ router.get('/', function(req, res, next) {
   // });
 
 });
+
+router.post('/',function(req, res, next){
+  console.log('-----------', typeof req.body.word);
+   model.Word.findAll().then(function(words){
+     helper.anagrams(req.body.word, words, function(anagrams){
+       //console.log(req.body.word);
+      res.render('index', {anagrams:anagrams})
+    })
+   })
+})
+
+router.get('/test',function(req, res, next){
+   model.Word.findAll().then(function(words){
+     res.send(words)
+   })
+})
 
 module.exports = router;
